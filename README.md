@@ -17,7 +17,7 @@ gunicorn -w 4 -b 0.0.0.0:80 app:app
 ```
 
 ## Konfigurasi
-- `ADMIN_KEY` — password admin (default: Kosay378%)
+- `ADMIN_KEY` — password admin (default: admin123%)
 - `SECRET_KEY` — session signing key
 
 ## Lisensi
