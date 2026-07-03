@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Abuse — Meta Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=6) }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/logo-icon.svg') }}?v=2">
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="logo">
+            <div class="logo-icon"><img src="{{ url_for('static', filename='img/logo-icon.svg') }}?v=2" alt="M"></div>
+            <span class="logo-text">Meta</span>
+            <span class="logo-sub">Tech</span>
+        </a>
+        <div class="header-actions">
+            <a href="{{ url_for('recent') }}" class="btn-ghost">Browse</a>
+            <a href="/" class="btn-accent">Upload</a>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <div class="page-container">
+            <div class="page-header">
+                <h1>Report Abuse</h1>
+                <p class="page-date">Report policy violations, copyright infringement, or abusive content</p>
+            </div>
+
+            <div class="page-body">
+                <p class="page-intro">Use this form to report content that violates our Terms of Service, including copyright infringement, hate speech, harassment, or any other prohibited material. We take all reports seriously and will investigate promptly.</p>
+
+                {% if submitted %}
+                <div class="success-box">
+                    <svg class="success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    <div>
+                        <strong>Report Submitted</strong>
+                        <p>Thank you. We will review your report and take appropriate action within 48 hours.</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <form class="legal-form" method="POST" action="{{ url_for('abuse') }}">
+                    <div class="form-group">
+                        <label for="type">Report Type</label>
+                        <select id="type" name="type" required>
+                            <option value="">Select a category...</option>
+                            <option value="copyright">Copyright Infringement (DMCA)</option>
+                            <option value="hate_speech">Hate Speech / Harassment</option>
+                            <option value="violence">Violent or Graphic Content</option>
+                            <option value="illegal">Illegal Activity</option>
+                            <option value="spam">Spam or Misleading Content</option>
+                            <option value="malware">Malware or Malicious Code</option>
+                            <option value="other">Other Violation</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content_url">Content URL</label>
+                        <input type="url" id="content_url" name="content_url" placeholder="https://..." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="5" placeholder="Describe the violation in detail..." required></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" placeholder="Full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="confirm" required>
+                            <span>I confirm that this report is made in good faith and the information provided is accurate</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-accent form-submit">Submit Report</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-copy">&copy; 2026 Meta Tech</span>
+            <div class="footer-divider"></div>
+            <div class="footer-links">
+                <a href="{{ url_for('terms') }}" class="footer-link">Terms of Service</a>
+                <a href="{{ url_for('privacy') }}" class="footer-link">Privacy Policy</a>
+                <a href="{{ url_for('abuse') }}" class="footer-link">Report Abuse</a>
+                <a href="{{ url_for('contact') }}" class="footer-link">Contact</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

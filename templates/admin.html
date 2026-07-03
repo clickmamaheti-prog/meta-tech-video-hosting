@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Meta Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=7) }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/logo-icon.svg') }}?v=2">
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="logo">
+            <div class="logo-icon"><img src="{{ url_for('static', filename='img/logo-icon.svg') }}?v=2" alt="M"></div>
+            <span class="logo-text">Meta</span>
+            <span class="logo-sub">Tech</span>
+        </a>
+        <div class="header-actions">
+            <a href="{{ url_for('recent') }}" class="btn-ghost">Browse</a>
+            <a href="/" class="btn-accent">Upload</a>
+        </div>
+    </header>
+
+    <main class="hero" style="min-height:50vh;">
+        <div class="hero-content" style="max-width:420px;">
+            <h1 style="font-size:1.5rem;">Admin Login</h1>
+
+            {% if error %}
+            <div style="background:#ff47571a;border:1px solid #ff4757;color:#ff6b81;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:0.9rem;">{{ error }}</div>
+            {% endif %}
+
+            {% if is_admin %}
+            <div style="background:#2ed5731a;border:1px solid #2ed573;color:#7bed9f;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:0.9rem;">You are logged in as admin.</div>
+            <a href="{{ url_for('recent') }}" class="btn-accent" style="display:block;text-align:center;padding:12px;border-radius:8px;text-decoration:none;">Go to Browse</a>
+            <a href="{{ url_for('admin_logout') }}" style="display:block;text-align:center;margin-top:12px;color:#888;font-size:0.9rem;">Logout</a>
+            {% else %}
+            <form method="POST">
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label for="password" style="display:block;margin-bottom:6px;color:#aaa;font-size:0.85rem;">Admin Password</label>
+                    <input type="password" id="password" name="password" required
+                           style="width:100%;padding:12px 14px;background:#16213e;border:1px solid #2a2a5a;border-radius:8px;color:#fff;font-size:1rem;outline:none;">
+                </div>
+                <button type="submit" class="btn-upload" style="width:100%;">Login</button>
+            </form>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-copy">&copy; 2026 Meta Tech</span>
+            <div class="footer-divider"></div>
+            <div class="footer-links">
+                <a href="{{ url_for('terms') }}" class="footer-link">Terms of Service</a>
+                <a href="{{ url_for('privacy') }}" class="footer-link">Privacy Policy</a>
+                <a href="{{ url_for('abuse') }}" class="footer-link">Report Abuse</a>
+                <a href="{{ url_for('contact') }}" class="footer-link">Contact</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

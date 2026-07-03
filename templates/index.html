@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta Tech | Indonesia Bufering</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=7) }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/logo-icon.svg') }}?v=2">
+    <script src="{{ url_for('static', filename='js/monetag.js', v=1) }}"></script>
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="logo">
+            <div class="logo-icon"><img src="{{ url_for('static', filename='img/logo-icon.svg') }}?v=2" alt="M"></div>
+            <span class="logo-text">Meta</span>
+            <span class="logo-sub">Tech</span>
+        </a>
+        <div class="header-actions">
+            <a href="{{ url_for('recent') }}" class="btn-ghost">Browse</a>
+            <label for="fileInput" class="btn-accent" style="cursor:pointer;">Upload</label>
+        </div>
+    </header>
+
+    <main class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                Free & Simple Video Hosting
+            </div>
+
+            <h1>Upload your videos<br><span class="highlight">and share</span></h1>
+            <p>Fast, reliable, and secure video hosting platform.<br>No account required. Start sharing in seconds.</p>
+
+            <div class="drop-wrapper">
+                <div class="drop-area" id="dropArea">
+                    <div class="drop-content">
+                        <div class="drop-icon-wrap">
+                            <svg class="drop-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                        </div>
+                        <h3>Choose a video or drag it here</h3>
+                        <p>MP4, WebM, MOV, AVI, MKV &mdash; up to 500MB</p>
+                    </div>
+                    <div class="preview-content">
+                        <video class="preview-video" id="previewVideo" controls></video>
+                        <p class="preview-filename" id="previewName"></p>
+                    </div>
+                </div>
+                <input type="file" id="fileInput" accept="video/*" class="hidden-input">
+
+                <button class="btn-upload" id="uploadBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    Upload Video
+                </button>
+                <p class="upload-hint">No account needed &bull; 500MB max &bull; Secure</p>
+            </div>
+
+            <div class="progress-wrapper" id="progressWrapper">
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">Uploading...</div>
+            </div>
+
+            <div class="result-card" id="resultCard">
+                <span class="result-label">Share Link</span>
+                <div class="url-box">
+                    <input type="text" id="shareUrl" readonly>
+                    <button onclick="copyUrl()">Copy</button>
+                </div>
+                <span class="result-label" style="margin-top:12px;">Direct Link</span>
+                <div class="url-box">
+                    <input type="text" id="directUrl" readonly>
+                    <button onclick="copyDirect()">Copy</button>
+                </div>
+                <div class="result-actions">
+                    <a href="" id="viewLink" target="_blank">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        Open
+                    </a>
+                    <a href="" id="downloadLink" target="_blank">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Download
+                    </a>
+                    <button onclick="uploadNew()">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Upload Another
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-copy">&copy; 2026 Meta Tech</span>
+            <div class="footer-divider"></div>
+            <div class="footer-links">
+                <a href="{{ url_for('terms') }}" class="footer-link">Terms of Service</a>
+                <a href="{{ url_for('privacy') }}" class="footer-link">Privacy Policy</a>
+                <a href="{{ url_for('abuse') }}" class="footer-link">Report Abuse</a>
+                <a href="{{ url_for('contact') }}" class="footer-link">Contact</a>
+            </div>
+        </div>
+    </footer>    <script>
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const progressWrapper = document.getElementById('progressWrapper');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const resultCard = document.getElementById('resultCard');
+        const shareUrl = document.getElementById('shareUrl');
+        const directUrl = document.getElementById('directUrl');
+        const viewLink = document.getElementById('viewLink');
+        const downloadLink = document.getElementById('downloadLink');
+        const previewVideo = document.getElementById('previewVideo');
+        const previewName = document.getElementById('previewName');
+
+        let selectedFile = null;
+
+        function handleFile(file) {
+            if (!file) return;
+            if (!file.type.startsWith('video/')) {
+                alert('Please select a video file.');
+                return;
+            }
+            if (file.size > 500 * 1024 * 1024) {
+                alert('File too large. Maximum is 500MB.');
+                return;
+            }
+            selectedFile = file;
+            dropArea.classList.add('has-file');
+            const url = URL.createObjectURL(file);
+            previewVideo.src = url;
+            previewVideo.load();
+            previewName.textContent = file.name;
+        }
+
+        dropArea.addEventListener('click', function(e) {
+            if (e.target.tagName !== 'VIDEO') fileInput.click();
+        });
+
+        dropArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        dropArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+        });
+
+        dropArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            handleFile(file);
+        });
+
+        fileInput.addEventListener('change', function(e) {
+            handleFile(this.files[0]);
+        });
+
+        uploadBtn.addEventListener('click', async function() {
+            if (!selectedFile) {
+                fileInput.click();
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+
+            resultCard.classList.remove('show');
+            progressWrapper.classList.add('show');
+            progressFill.style.width = '0%';
+            progressText.textContent = 'Uploading...';
+
+            let progress = 0;
+            const progressInterval = setInterval(function() {
+                if (progress < 90) {
+                    progress += Math.random() * 12;
+                    if (progress > 90) progress = 90;
+                    progressFill.style.width = progress + '%';
+                }
+            }, 250);
+
+            try {
+                const resp = await fetch('/upload', { method: 'POST', body: formData });
+                const data = await resp.json();
+
+                clearInterval(progressInterval);
+
+                if (data.success) {
+                    progressFill.style.width = '100%';
+                    progressText.textContent = 'Upload complete!';
+
+                    setTimeout(function() {
+                        progressWrapper.classList.remove('show');
+                        shareUrl.value = data.url;
+                        directUrl.value = data.direct_url;
+                        viewLink.href = data.url;
+                        downloadLink.href = '/dl/' + data.filename;
+                        resultCard.classList.add('show');
+                    }, 500);
+                } else {
+                    progressText.textContent = 'Error: ' + data.error;
+                }
+            } catch (err) {
+                clearInterval(progressInterval);
+                progressFill.style.width = '0%';
+                progressText.textContent = 'Upload failed. Please try again.';
+            }
+        });
+
+        function copyUrl() {
+            const input = document.getElementById('shareUrl');
+            input.select();
+            navigator.clipboard.writeText(input.value).then(function() {
+                const btn = input.nextElementSibling;
+                const orig = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(function() { btn.textContent = orig; }, 2000);
+            }).catch(function() {
+                document.execCommand('copy');
+            });
+        }
+
+        function copyDirect() {
+            const input = document.getElementById('directUrl');
+            input.select();
+            navigator.clipboard.writeText(input.value).then(function() {
+                const btn = input.nextElementSibling;
+                const orig = btn.textContent;
+                btn.textContent = 'Copied!';
+                setTimeout(function() { btn.textContent = orig; }, 2000);
+            }).catch(function() {
+                document.execCommand('copy');
+            });
+        }
+
+        function uploadNew() {
+            resultCard.classList.remove('show');
+            dropArea.classList.remove('has-file');
+            previewVideo.src = '';
+            previewVideo.load();
+            previewName.textContent = '';
+            selectedFile = null;
+            fileInput.value = '';
+        }
+    </script>
+</body>
+</html>

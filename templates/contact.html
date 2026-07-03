@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — Meta Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=6) }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/logo-icon.svg') }}?v=2">
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="logo">
+            <div class="logo-icon"><img src="{{ url_for('static', filename='img/logo-icon.svg') }}?v=2" alt="M"></div>
+            <span class="logo-text">Meta</span>
+            <span class="logo-sub">Tech</span>
+        </a>
+        <div class="header-actions">
+            <a href="{{ url_for('recent') }}" class="btn-ghost">Browse</a>
+            <a href="/" class="btn-accent">Upload</a>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <div class="page-container">
+            <div class="page-header">
+                <h1>Contact Us</h1>
+                <p class="page-date">Get in touch with the Meta Tech team</p>
+            </div>
+
+            <div class="page-body">
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <h3>Email</h3>
+                        <p><a href="mailto:support@methatech.eu.org" class="contact-link">support@methatech.eu.org</a></p>
+                        <p class="contact-note">Response within 24 hours</p>
+                    </div>
+
+                    <div class="contact-card">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        <h3>Location</h3>
+                        <p>Jakarta, Indonesia</p>
+                        <p class="contact-note">ID subdomain</p>
+                    </div>
+
+                    <div class="contact-card">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        <h3>Website</h3>
+                        <p><a href="https://id.methatech.eu.org" class="contact-link">id.methatech.eu.org</a></p>
+                        <p class="contact-note">Main domain</p>
+                    </div>
+                </div>
+
+                {% if submitted %}
+                <div class="success-box">
+                    <svg class="success-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    <div>
+                        <strong>Message Sent!</strong>
+                        <p>Thank you for reaching out. We'll get back to you within 24 hours.</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <h2 class="form-heading">Send us a Message</h2>
+                <form class="legal-form" method="POST" action="{{ url_for('contact') }}">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="What's this about?" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="6" placeholder="Your message..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-accent form-submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-copy">&copy; 2026 Meta Tech</span>
+            <div class="footer-divider"></div>
+            <div class="footer-links">
+                <a href="{{ url_for('terms') }}" class="footer-link">Terms of Service</a>
+                <a href="{{ url_for('privacy') }}" class="footer-link">Privacy Policy</a>
+                <a href="{{ url_for('abuse') }}" class="footer-link">Report Abuse</a>
+                <a href="{{ url_for('contact') }}" class="footer-link">Contact</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

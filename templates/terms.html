@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms — Meta Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=6) }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/logo-icon.svg') }}?v=2">
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="logo">
+            <div class="logo-icon"><img src="{{ url_for('static', filename='img/logo-icon.svg') }}?v=2" alt="M"></div>
+            <span class="logo-text">Meta</span>
+            <span class="logo-sub">Tech</span>
+        </a>
+        <div class="header-actions">
+            <a href="{{ url_for('recent') }}" class="btn-ghost">Browse</a>
+            <a href="/" class="btn-accent">Upload</a>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <div class="page-container">
+            <div class="page-header">
+                <h1>Terms of Service</h1>
+                <p class="page-date">Last updated: July 3, 2026</p>
+            </div>
+
+            <div class="page-body">
+                <section class="legal-section">
+                    <h2>1. Acceptance of Terms</h2>
+                    <p>By accessing or using Meta Tech ("the Service"), you agree to be bound by these Terms of Service. If you do not agree, do not use the Service.</p>
+                </section>
+
+                <section class="legal-section">
+                    <h2>2. Service Description</h2>
+                    <p>Meta Tech provides a video hosting platform that allows users to upload, store, and share video content. The Service is provided "as is" without any warranties, express or implied.</p>
+                </section>
+
+                <section class="legal-section">
+                    <h2>3. User Responsibilities</h2>
+                    <p>You are solely responsible for all content you upload. You warrant that:</p>
+                    <ul>
+                        <li>You own or have the necessary rights to the content</li>
+                        <li>Your content does not violate any laws or third-party rights</li>
+                        <li>Your content is not harmful, offensive, or illegal</li>
+                        <li>You will not use the Service for spam, phishing, or malware distribution</li>
+                    </ul>
+                </section>
+
+                <section class="legal-section">
+                    <h2>4. Prohibited Content</h2>
+                    <p>The following content is strictly prohibited:</p>
+                    <ul>
+                        <li>Child sexual abuse material (CSAM) or any content involving minors</li>
+                        <li>Explicit violence, gore, or graphic content</li>
+                        <li>Hate speech, harassment, or discriminatory content</li>
+                        <li>Copyright-infringing material</li>
+                        <li>Malware, viruses, or malicious code</li>
+                        <li>Personal or private information without consent</li>
+                    </ul>
+                </section>
+
+                <section class="legal-section">
+                    <h2>5. Copyright & DMCA</h2>
+                    <p>We respect intellectual property rights. If you believe your copyright has been infringed, please submit a report via our Report Abuse page with the following information:</p>
+                    <ul>
+                        <li>Identification of the copyrighted work</li>
+                        <li>Identification of the infringing material with a direct URL</li>
+                        <li>Your contact information</li>
+                        <li>A statement of good faith belief that the use is unauthorized</li>
+                    </ul>
+                </section>
+
+                <section class="legal-section">
+                    <h2>6. Limitation of Liability</h2>
+                    <p>Meta Tech shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the Service. Our total liability is limited to the amount you paid to use the Service (if any).</p>
+                </section>
+
+                <section class="legal-section">
+                    <h2>7. Termination</h2>
+                    <p>We reserve the right to suspend or terminate access to the Service for any violation of these Terms, without prior notice and at our sole discretion.</p>
+                </section>
+
+                <section class="legal-section">
+                    <h2>8. Changes to Terms</h2>
+                    <p>We may update these Terms at any time. Continued use of the Service after changes constitutes acceptance of the new Terms. We will notify users of material changes via our website.</p>
+                </section>
+
+                <section class="legal-section">
+                    <h2>9. Governing Law</h2>
+                    <p>These Terms shall be governed by and construed in accordance with applicable laws. Any disputes shall be resolved through binding arbitration.</p>
+                </section>
+
+                <section class="legal-section">
+                    <h2>10. Contact</h2>
+                    <p>For questions about these Terms, please contact us through our <a href="{{ url_for('contact') }}" class="legal-link">Contact page</a>.</p>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-copy">&copy; 2026 Meta Tech</span>
+            <div class="footer-divider"></div>
+            <div class="footer-links">
+                <a href="{{ url_for('terms') }}" class="footer-link">Terms of Service</a>
+                <a href="{{ url_for('privacy') }}" class="footer-link">Privacy Policy</a>
+                <a href="{{ url_for('abuse') }}" class="footer-link">Report Abuse</a>
+                <a href="{{ url_for('contact') }}" class="footer-link">Contact</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

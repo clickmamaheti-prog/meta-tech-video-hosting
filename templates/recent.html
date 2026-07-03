@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse — Meta Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=6) }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/logo-icon.svg') }}?v=2">
+    <script src="{{ url_for('static', filename='js/monetag.js', v=1) }}"></script>
+</head>
+<body>
+    <header class="header">
+        <a href="/" class="logo">
+            <div class="logo-icon"><img src="{{ url_for('static', filename='img/logo-icon.svg') }}?v=2" alt="M"></div>
+            <span class="logo-text">Meta</span>
+            <span class="logo-sub">Tech</span>
+        </a>
+        <div class="header-actions">
+            <a href="/" class="btn-accent">Upload</a>
+            {% if is_admin %}
+            <a href="{{ url_for('admin_logout') }}" class="btn-ghost" style="color:#ff4757;">Logout</a>
+            {% else %}
+            <a href="{{ url_for('admin_login') }}" class="btn-ghost">Admin</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <main class="recent-container">
+        <div class="page-header">
+            <h2>Recent Videos</h2>
+            <span style="font-size:13px;color:var(--text-muted);">{{ files|length }} video{% if files|length != 1 %}s{% endif %}</span>
+        </div>
+
+        {% if files %}
+        <div class="gallery-grid">
+            {% for f in files %}
+            <div class="gallery-item">
+                <a href="{{ url_for('view_video', filename=f.filename) }}">
+                    <div class="gallery-thumb">
+                        <div class="play-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="8 5 19 12 8 19 8 5"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="gallery-info">
+                        <div class="gallery-name">{{ f.filename }}</div>
+                        <div class="gallery-size">
+                            {% if f.size < 1024 %}
+                                {{ f.size }} B
+                            {% elif f.size < 1048576 %}
+                                {{ (f.size / 1024)|round(1) }} KB
+                            {% else %}
+                                {{ (f.size / 1048576)|round(1) }} MB
+                            {% endif %}
+                        </div>
+                    </div>
+                </a>
+                {% if is_admin %}
+                <button class="gallery-delete" onclick="event.preventDefault(); event.stopPropagation(); deleteFile('{{ f.filename }}')" title="Delete">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="23 7 16 12 23 17 23 7"/>
+                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+            </svg>
+            <p>No videos uploaded yet. Be the first!</p>
+            <a href="/" class="btn-download" style="display:inline-flex;margin-top:20px;padding:12px 24px;border-radius:8px;font-size:14px;">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Upload Video
+            </a>
+        </div>
+        {% endif %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-copy">&copy; 2026 Meta Tech</span>
+            <div class="footer-divider"></div>
+            <div class="footer-links">
+                <a href="{{ url_for('terms') }}" class="footer-link">Terms of Service</a>
+                <a href="{{ url_for('privacy') }}" class="footer-link">Privacy Policy</a>
+                <a href="{{ url_for('abuse') }}" class="footer-link">Report Abuse</a>
+                <a href="{{ url_for('contact') }}" class="footer-link">Contact</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        function deleteFile(filename) {
+            if (confirm('Delete "' + filename + '" permanently?')) {
+                fetch('/delete/' + encodeURIComponent(filename), { method: 'POST' })
+                    .then(r => r.json())
+                    .then(d => {
+                        if (d.success) {
+                            location.reload();
+                        } else {
+                            alert('Error: ' + d.error);
+                        }
+                    });
+            }
+        }
+    </script>
+</body>
+</html>

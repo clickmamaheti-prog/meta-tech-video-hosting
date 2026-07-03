@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <!-- Premium deep gradient background -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A89AFF"/>
+      <stop offset="40%" stop-color="#7C68EE"/>
+      <stop offset="100%" stop-color="#4A2FCC"/>
+    </linearGradient>
+
+    <!-- Shine highlight overlay -->
+    <linearGradient id="shine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.45"/>
+      <stop offset="35%" stop-color="#FFFFFF" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- M letter metallic gradient -->
+    <linearGradient id="mGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="30%" stop-color="#F5F0FF"/>
+      <stop offset="70%" stop-color="#D0C4FF"/>
+      <stop offset="100%" stop-color="#B8A8FF"/>
+    </linearGradient>
+
+    <!-- Drop shadow filter -->
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="1.5" dy="2.5" stdDeviation="3.5" flood-color="#1F0F6E" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <!-- Main rounded square -->
+  <rect x="0" y="0" width="32" height="32" rx="7" fill="url(#bgGrad)" filter="url(#shadow)"/>
+
+  <!-- Glass shine overlay -->
+  <rect x="0" y="0" width="32" height="32" rx="7" fill="url(#shine)"/>
+
+  <!-- Bottom dark edge for depth -->
+  <rect x="0" y="24" width="32" height="8" rx="0" fill="#1A0A5E" fill-opacity="0.15"/>
+
+  <!-- Subtle inner border highlight -->
+  <rect x="0.5" y="0.5" width="31" height="31" rx="6.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.2" stroke-width="0.8"/>
+
+  <!-- Premium M letter - filled solid path (better at small sizes) -->
+  <path d="M8.5 24V8.5l7.5 9.5 7.5-9.5V24" 
+        fill="none" 
+        stroke="url(#mGrad)" 
+        stroke-width="3.2" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+
+  <!-- M letter metallic shine (offset slightly left-up) -->
+  <path d="M8.5 24V8.5l7.5 9.5 7.5-9.5V24" 
+        fill="none" 
+        stroke="#FFFFFF" 
+        stroke-opacity="0.4" 
+        stroke-width="1.4" 
+        stroke-linecap="round" 
+        stroke-linejoin="round" 
+        transform="translate(-0.5, -0.8)"/>
+</svg>
