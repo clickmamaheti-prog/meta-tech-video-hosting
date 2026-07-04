@@ -1,8 +1,13 @@
 import os
 import uuid
 import secrets
+import requests
+from dotenv import load_dotenv
 from flask import Flask, request, render_template, url_for, send_from_directory, jsonify, session, redirect
 from werkzeug.middleware.proxy_fix import ProxyFix
+
+# Load .env file
+load_dotenv()
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
@@ -170,6 +175,110 @@ def contact():
         print(f"[CONTACT] From: {name} <{email}> | Subject: {subject} | Message: {message}")
         submitted = True
     return render_template('contact.html', submitted=submitted)
+
+# Initialize Opencode client
+def _get_opencode():
+    api_key = os.getenv('OPENCODE_API_KEY', 'sk-nRt...WXCQ')
+    base_url = os.getenv('OPENCODE_BASE_URL', 'https://opencode.ai/zen/v1')
+    return {'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'}, base_url
+
+_opencode_headers, _opencode_base_url = _get_opencode()
+
+def call_opencode(prompt: str) -> str:
+    """Kirim prompt ke Opencode API dan kembalikan jawaban."""
+    url = f"{_opencode_base_url}/chat/completions"
+    payload = {
+        "model": "deepseek-v4-flash-free",
+        "messages": [
+            {"role": "system", "content": "Kamu adalah asisten AI Meta Tech — platform video hosting GRATIS Indonesia (tagline: Indonesia Bufering). BUKAN Meta/Facebook/Instagram. Jawab SINGKAT, bahasa Indonesia, hanya soal Meta Tech: upload video max 500MB (MP4, WebM, MOV, dll), tanpa akun, dapat link share langsung, gratis selamanya, iklan interstisial sekali per sesi. Jika di luar topik Meta Tech, jawab singkat 'Maaf, aku hanya bisa bantu soal Meta Tech video hosting.'"},
+            {"role": "user", "content": prompt}
+        ],
+        "max_tokens": 800,
+        "temperature": 0.4
+    }
+    response = requests.post(url, headers=_opencode_headers, json=payload, timeout=30)
+    response.raise_for_status()
+    result = response.json()
+    msg = result['choices'][0]['message']
+    # Handle reasoning models: use reasoning_content if content is empty
+    content = msg.get('content', '').strip()
+    reasoning = msg.get('reasoning_content', '').strip()
+    if not content and reasoning:
+        return reasoning
+    return content
+
+# AI Chat Assistant - Knowledge base
+AI_KNOWLEDGE = {
+    'upload': '📤 **Cara Upload Video:**\n\n1. Klik area upload atau tombol "Upload Video"\n2. Pilih video dari komputer (max 500MB)\n3. Tunggu proses upload selesai\n4. Copy link dan bagikan!\n\nFormat: MP4, WebM, MOV, AVI, MKV, FLV, WMV.',
+    'limit': '📦 **Batas Upload:**\nMaksimal **500MB** per file. Format: MP4, WebM, MOV, AVI, MKV, FLV, WMV, M4V, 3GP, OGV.',
+    'free': '💰 **Meta Tech GRATIS!**\nTidak ada biaya upload, download, atau streaming. Layanan tetap gratis selama ada dukungan pengunjung.',
+    'about': '💡 **Apa itu Meta Tech?**\nPlatform video hosting gratis — Indonesia Bufering. Upload, share, dan streaming video dengan mudah. Tanpa akun, langsung dapat link.',
+    'share': '🔗 **Bagikan Video:**\nSetelah upload, copy link "Share Link" atau "Direct Link" dan bagikan ke teman/grup/media sosial.',
+    'download': '⬇️ **Download Video:**\nBuka halaman video, klik tombol "Download" untuk mengunduh.',
+    'contact': '📧 **Hubungi Kami:**\nBuka halaman Contact di footer website atau kirim laporan lewat Report Abuse.',
+    'privacy': '🔒 **Privasi & Keamanan:**\nVideo hanya bisa diakses lewat link unik. Kami tidak membagikan data pengguna.',
+    'mobile': '📱 **Mobile Friendly:**\nMeta Tech bisa diakses dari HP/tablet. Upload langsung dari galeri atau file manager.',
+    'delete': '🗑️ **Hapus Video:**\nHanya admin yang bisa menghapus. Laporkan konten tidak pantas lewat Report Abuse.',
+    'browse': '🔍 **Cari Video:**\nKlik "Browse" di header untuk melihat video terbaru yang sudah diupload.',
+    'account': '🔑 **Tanpa Akun!**\nMeta Tech tidak pakai sistem akun. Upload langsung dapat link — tidak perlu daftar atau login.',
+    'ads': '📢 **Iklan:**\nMeta Tech menggunakan iklan interstisial sekali per sesi untuk mendukung layanan gratis.',
+    'speed': '⚡ **Streaming:**\nKecepatan tergantung koneksi internet. Gunakan WiFi/data stabil untuk hasil terbaik.',
+}
+
+AI_FALLBACKS = [
+    'Hmm, aku belum tahu jawabannya. Coba tanya dengan kata kunci lain, atau hubungi Contact di footer!',
+    'Maaf, belum paham. Coba ulangi dengan kalimat berbeda ya!',
+    'Wah, belum ada di pengetahuanku. Coba tanya: cara upload, batas file, atau tentang Meta Tech.',
+]
+
+def ai_find_answer(query):
+    q = query.lower().strip()
+    # Map keywords to knowledge keys
+    kw_map = {
+        'upload': ['upload', 'cara upload', 'unggah', 'video'],
+        'limit': ['limit', 'max', 'ukuran', 'size', 'besar', '500mb', '500 mb', 'batas'],
+        'free': ['gratis', 'free', 'bayar', 'harga', 'biaya', 'cost', 'price'],
+        'about': ['meta tech', 'meta', 'tentang', 'about', 'apa itu', 'fungsi', 'kegunaan', 'ini apa'],
+        'share': ['link', 'share', 'bagikan', 'copy link', 'teman', 'url'],
+        'download': ['download', 'unduh', 'save', 'simpan', 'download video'],
+        'contact': ['kontak', 'contact', 'email', 'bantuan', 'help', 'support', 'hubungi'],
+        'privacy': ['privasi', 'privacy', 'data', 'aman', 'security', 'keamanan'],
+        'mobile': ['hp', 'mobile', 'android', 'iphone', 'ios', 'handphone'],
+        'delete': ['hapus', 'delete', 'remove', 'ilang'],
+        'browse': ['browse', 'cari', 'search', 'recent', 'video lain', 'banyak'],
+        'account': ['daftar', 'register', 'sign up', 'login', 'akun', 'account'],
+        'ads': ['iklan', 'ad', 'ads', 'monetag', 'redirect'],
+        'speed': ['lambat', 'cepat', 'speed', 'buffering', 'streaming', 'kecepatan'],
+    }
+    for key, keywords in kw_map.items():
+        for kw in keywords:
+            if kw in q or q in kw:
+                return AI_KNOWLEDGE.get(key)
+    return None
+
+@app.route('/api/chat', methods=['POST'])
+def ai_chat():
+    data = request.get_json(silent=True)
+    if not data or 'message' not in data:
+        return jsonify({'error': 'No message'}), 400
+    message = data['message'].strip()
+    if not message:
+        return jsonify({'error': 'Empty message'}), 400
+
+    # Try Opencode first, fallback to local knowledge base
+    try:
+        answer = call_opencode(message)
+    except Exception as e:
+        # Fallback to AI knowledge base
+        answer = ai_find_answer(message)
+        if not answer:
+            import random
+            answer = random.choice(AI_FALLBACKS)
+
+    return jsonify({
+        'answer': answer,
+        'session_id': data.get('session_id', str(uuid.uuid4()))
+    })
 
 @app.errorhandler(413)
 def too_large(e):
